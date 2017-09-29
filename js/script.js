@@ -19,16 +19,25 @@ function createGrid(size) {
 
 //generate random color
 function randomColor() {
-	var randomInteger1 = Math.floor(Math.random() * 255);
-	var randomInteger2 = Math.floor(Math.random() * 255);
-	var randomInteger3 = Math.floor(Math.random() * 255);
-	var color = 'rgb(' + randomInteger1 + ', ' + randomInteger2 + ', ' + randomInteger3 + ')';
+	var randomInteger = [];
+	for (i=0;i<3;i++) {
+		randomInteger[i] = Math.floor(Math.random() * 255);
+	}
+	var color = 'rgb(' + randomInteger[0] + ', ' + randomInteger[1] + ', ' + randomInteger[2] + ')';
 	return color;
 }
 
 //take current background color and add 10% black to it
-function darkenColor(rgbColor) {
-	
+function darkenColor(rgb) {
+	//regex thanks to StackOverflow: https://stackoverflow.com/a/10971090
+	rgb = rgb.replace(/[^\d,]/g, '').split(',');
+	// make each rgb integer 10% darker
+	for (i = 0; i < 3; i++) {
+		rgb[i] = Math.floor(rgb[i] * .9);
+	}
+	rgbDarker = 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
+	console.log(rgbDarker);
+	return rgbDarker;
 }
 
 $(document).ready(function() {
@@ -46,15 +55,15 @@ $(document).ready(function() {
 	var colorCheck = true;
 	//mouse over cells to draw .drawcell
 	$('.drawcell').on("mouseenter", function(){
-		var $backgroundColor = $(this).css("background-color");
+		var backgroundColor = $(this).css("background-color");
 		if(colorCheck) {
-			if($backgroundColor === 'rgb(255, 255, 255)'){
+			if(backgroundColor === 'rgb(255, 255, 255)'){
 				$(this).css("background-color", randomColor());
 			} else {
-				$(this).css("background-color", darkenColor($backgroundColor));
+				$(this).css("background-color", darkenColor(backgroundColor));
 			}
 		} else {
-			if($backgroundColor === 'rgb(255, 255, 255)'){
+			if(backgroundColor === 'rgb(255, 255, 255)'){
 				$(this).css("background-color", "black");
 			}
 		}
