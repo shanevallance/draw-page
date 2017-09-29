@@ -2,9 +2,7 @@
 function createGrid(size) {
 	//var responsiveSize = (100 / size) + '%';
 	//clears any previous table
-	$('.draw-area').empty();
-	//create new table 
-	$('.draw-area').append("<div id='drawsquare'></div>");
+	$('#drawsquare').empty();
 	//create rows
 	for (i = 0; i < size; i++){
 		$('#drawsquare').append("<div class='drawrow'></div>");
@@ -13,8 +11,6 @@ function createGrid(size) {
 	for(j = 0; j < size; j++){
 		$('#drawsquare').find('.drawrow').append("<div class='drawcell'></div>");
 	}
-	//$('.drawrow').css('height', responsiveSize);
-	//$('.drawcell').css('width', responsiveSize);
 }
 
 //generate random color
@@ -36,25 +32,40 @@ function darkenColor(rgb) {
 		rgb[i] = Math.floor(rgb[i] * .9);
 	}
 	rgbDarker = 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
-	console.log(rgbDarker);
 	return rgbDarker;
 }
 
 $(document).ready(function() {
 
 	// Buttons
+	/*
 	$('.button').on('mouseover',function() {
 		$(this).css({color: "black", border:"1px solid black"});
 	});
 	$('.button').on('mouseleave',function() {
 		$(this).css({color: "gray", border:"1px solid gray"});
 	});
+	*/
+	//reset button #btnReset
+	$('#btnReset').click(function() {
+		var grid = parseInt(prompt("How many rows and columns would you like to create?", "16"), 0);
+		if(grid>0){
+			createGrid(grid);
+		} else {
+			alert("Please enter a valid number.")
+		}
+	});
+	//color button #btnColor #colorStatus
+	$('#btnColor').click(function(){
+		colorCheck = !colorCheck;
+		$('#colorStatus').text(colorCheck.toString().toUpperCase());
+	});
 	//create initial 16 x 16 div grid
 	createGrid(16);
 	//variable determines if drawing in B&W or color(default: true)
 	var colorCheck = true;
 	//mouse over cells to draw .drawcell
-	$('.drawcell').on("mouseenter", function(){
+	$('#drawsquare').on("mouseenter", '.drawcell', function(){
 		var backgroundColor = $(this).css("background-color");
 		if(colorCheck) {
 			if(backgroundColor === 'rgb(255, 255, 255)'){
@@ -63,15 +74,10 @@ $(document).ready(function() {
 				$(this).css("background-color", darkenColor(backgroundColor));
 			}
 		} else {
-			if(backgroundColor === 'rgb(255, 255, 255)'){
+			if(backgroundColor !== 'rgb(0, 0, 0)'){
 				$(this).css("background-color", "black");
 			}
 		}
 	});
-	//reset button #btnReset
-	
-	
-	//color button #btnColor #colorStatus
-	
 });
 
